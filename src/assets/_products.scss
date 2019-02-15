@@ -1,0 +1,26 @@
+.products {
+  .category-list {
+    a {
+      display: flex;
+      align-items: center;
+      padding: 6px 8px;
+      border: 2px solid $primary;
+      color: $primary;
+      overflow: hidden;
+      border-radius: 10px;
+      transition: all 0.3s;
+      &:hover,
+      &.active {
+        background-color: $warning;
+        border-color: $warning;
+      }
+    }
+    img{
+      display: none;
+      @include media-breakpoint-up(sm) {
+        display: inline-block;
+        margin-right: 3px;
+      }
+    }
+  }
+}

@@ -1,0 +1,132 @@
+.host-section {
+  position: relative;
+  height: 150px;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  &.host-switch {
+    background-image: url('../public/articleImg/switch.jpg');
+    @include bg-mask(red);
+  }
+  &.host-ps4 {
+    background-image: url('../public/articleImg/ps4.jpg');
+    @include bg-mask(black);
+  }
+  &.host-n3ds {
+    background-image: url('../public/articleImg/nintendo-3ds.jpg');
+    @include bg-mask(black);
+  }
+  @include media-breakpoint-up(sm) {
+    height: 200px;
+  }
+  @include media-breakpoint-up(md) {
+    height: 300px;
+    &:hover {
+      .host-info a {
+        transform: translateY(0px);
+      }
+    }
+  }
+  @include media-breakpoint-up(lg) {
+    height: 400px;
+  }
+}
+.host-info {
+  z-index: 10;
+  color: $white;
+  padding: 8px;
+  width: 80%;
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.4);
+  @include media-breakpoint-up(md) {
+    padding: 16px;
+  }
+  h3 {
+    border-bottom: 2px solid $white;
+  }
+  p {
+    font-size: 14px;
+    margin-bottom: 10px;
+    @include multiple-line-limited(2, 50px);
+    @include media-breakpoint-up(md) {
+      font-size: 16px;
+      margin-bottom: 15px;
+      @include multiple-line-limited(3, 100px);
+    }
+  }
+  .readMore {
+    a {
+      color: $white;
+      padding: 4px 8px;
+      border: 1px solid $white;
+      background-color: rgba(0, 0, 0, 0.3);
+      font-size: 14px;
+      transition: all 0.5s;
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+      @include media-breakpoint-up(md) {
+        padding: 8px 15px;
+        font-size: 16px;
+        transform: translateY(100px);
+      }
+    }
+  }
+}
+@mixin buy-reason($bgColor, $hoverBg) {
+  border-radius: 30px;
+  color: $white;
+  position: relative;
+  background-color: $bgColor;
+  transition: all 0.5s;
+  &:after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    bottom: -40px;
+    right: 50px;
+    border: transparent 20px solid;
+    border-top: $bgColor 20px solid;
+    transition: all 0.5s;
+  }
+  &:hover {
+    background-color: $hoverBg;
+    &:after {
+      border-top: $hoverBg 20px solid;
+    }
+  }
+}
+.reason-switch {
+  @include buy-reason(rgba(red, 0.6), rgba(red, 1));
+}
+.reason-ps4 {
+  @include buy-reason(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 1));
+}
+
+.toShopping {
+  padding: 10px 15px;
+  border: 2px solid $primary;
+  font-size: 20px;
+  transition: all 0.5s;
+  &:hover {
+    color: $white;
+    background-color: $primary;
+  }
+  i {
+    animation-name: arrowRight;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+  }
+}
+@keyframes arrowRight {
+  0% {
+    transform: translateX(0px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}

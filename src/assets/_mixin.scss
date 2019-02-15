@@ -1,0 +1,46 @@
+@mixin hidden_text{
+	text-indent: 101%;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+@mixin titleLine($border-color, $border-weight) {
+  display: flex;
+  align-items: center;
+  &:before,
+  &:after {
+    content: '';
+    flex-grow: 1;
+    border-top: $border-weight solid $border-color;
+  }
+  &:before {
+    margin: 0 10px 0 0;
+  }
+  &:after {
+    margin: 0 0 0 10px;
+  }
+}
+
+@mixin multiple-line-limited($lineNum, $maxHeight) {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $lineNum;
+  overflow: hidden;
+  max-height: $maxHeight;
+}
+
+@mixin bg-mask($color) {
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba($color, 0.5);
+    transition: all 0.5s;
+  }
+  &:hover:after {
+    background-color: rgba($color, 0.7);
+  }
+}

@@ -1,0 +1,79 @@
+// 引入 Bootstrap 樣式
+@import "~bootstrap/scss/functions";
+@import "./helpers/variables";
+@import "~bootstrap/scss/bootstrap";
+@import "./helpers/swiper"; //引入 swiper
+
+@import "./mixin";
+@import "./layout";
+@import "./index";
+@import "./gamehost";
+@import "./products";
+@import "./productCart";
+@import "./productDetail";
+@import "./createOrder";
+@import "./shopCart";
+
+
+//全域設定
+ul {
+	list-style: none;
+	padding-left: 0;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+//待修改
+.breadcrumb {
+	background-color: #fff;
+}
+
+// 購物車圖樣
+.cart {
+	position: fixed;
+	right: 20px;
+	bottom: 20px;
+	z-index: 10;
+	.cart-icon {
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		cursor:pointer;
+	}
+	.fa-shopping-cart {
+		font-size: 36px;
+		text-shadow: 0 0 2px rgba(0,0,0, 0.6);
+	}
+	.fa-circle {
+		position: absolute;
+		top: -7px;
+		right: -5px;
+		color: red;
+	}
+	.cart-box {
+		position: relative;
+    bottom: 50px;
+		right: 50px;
+		.btn-sm {
+			font-size: 12px;
+		}
+	}
+}
+
+// 提示訊息
+.message-alert {
+	position: fixed;
+	left: 0;
+	top: 0;
+	right: 0;
+	z-index: 1100;
+	transform: translateY(-100%);
+	transition: all 0.3s;
+	&.active {
+		transform: translateY(0%);
+	}
+}
+
+

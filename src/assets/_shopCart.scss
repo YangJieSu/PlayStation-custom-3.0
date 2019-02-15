@@ -1,0 +1,32 @@
+.cartList {
+  li {
+    border-bottom: 2px solid $secondary;
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+  .cartList-img {
+    max-width: 150px;
+  }
+  .cartList-prod {
+    a {
+      display: block;
+      font-size: 14px;
+      color: $primary;
+      @include media-breakpoint-up(md) {
+        font-size: 18px;
+      }
+      &:hover {
+        color: lighten( $primary, 10%);
+      }
+    }
+  }
+  .cartList-num,
+  .cartList-price {
+    font-size: 14px;
+    white-space: nowrap;
+    @include media-breakpoint-up(md) {
+      font-size: 16px;
+    }
+  }
+}

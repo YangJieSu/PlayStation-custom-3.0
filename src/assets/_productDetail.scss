@@ -1,0 +1,15 @@
+.productDetail {
+  .prodInfo {
+    padding: 20px;
+    h3,
+    h4 {
+      padding-bottom: 8px;
+      border-bottom: 2px solid $primary;
+    }
+    &.addCart {
+      margin-bottom: 20px;
+      background-color: $secondary;
+    }
+  }
+
+}

@@ -1,0 +1,5 @@
+.page_title {
+  white-space: nowrap;
+  font-size: 28px;
+  @include titleLine(darken($secondary,10%), 2px);
+}
