@@ -42,7 +42,7 @@
         </div>
       </div>
     </div>
-    
+
     <router-view></router-view>
 
     <Footer></Footer>
@@ -51,52 +51,52 @@
 </template>
 
 <script>
-import Navbar from '../components/Navbar.vue';
-import Footer from '../components/Footer.vue';
+import Navbar from './Navbar.vue';
+import Footer from './Footer.vue';
 
-  export default {
-    data() {
-      return {
-        cart: {
-          carts: [],
-        },
+export default {
+  data() {
+    return {
+      cart: {
+        carts: [],
+      },
       showCart: false,
-      }
-    },
-    components: {
-      Navbar,
-      Footer
-    },
-    methods: {
-      getCart() {
-        // 取得購物車列表
-        const vm = this;
-        let api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/cart`;
-        this.$http.get(api).then((response) => {
-          console.log(response.data);
-          vm.cart = response.data.data;
-        });
-      },
-      rempoveCart(id) {
-        // 刪除某一筆購物車
-        const vm = this;
-        let api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/cart/${id}`;
-        this.$http.delete(api).then((response) => {
-          console.log(response.data);
-          vm.getCart();
-        });
-      },
-      closeCart() {
-        const vm = this;
-        vm.showCart = false;
-      },
-    },
-    created() {
+    };
+  },
+  components: {
+    Navbar,
+    Footer,
+  },
+  methods: {
+    getCart() {
+      // 取得購物車列表
       const vm = this;
-      vm.getCart();
-      vm.$bus.$on('shopCart:update', () => {
+      const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/cart`;
+      this.$http.get(api).then((response) => {
+        console.log(response.data);
+        vm.cart = response.data.data;
+      });
+    },
+    rempoveCart(id) {
+      // 刪除某一筆購物車
+      const vm = this;
+      const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/cart/${id}`;
+      this.$http.delete(api).then((response) => {
+        console.log(response.data);
         vm.getCart();
       });
     },
-  };
+    closeCart() {
+      const vm = this;
+      vm.showCart = false;
+    },
+  },
+  created() {
+    const vm = this;
+    vm.getCart();
+    vm.$bus.$on('shopCart:update', () => {
+      vm.getCart();
+    });
+  },
+};
 </script>

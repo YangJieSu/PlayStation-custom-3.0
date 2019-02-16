@@ -71,26 +71,26 @@
 
 <script>
 export default {
-  name: "Footer",
-  data: function() {
+  name: 'Footer',
+  data() {
     return {
-      subemail: ''
+      subemail: '',
     };
   },
   methods: {
     subcription() {
       const vm = this;
-      let email = document.querySelector('#exampleInputEmail1');
-      this.$validator.validate().then(result => {
+      const email = document.querySelector('#exampleInputEmail1');
+      this.$validator.validate().then((result) => {
         if (result) {
           vm.$bus.$emit('message:push', `感謝 ${vm.subemail} 的訂閱!! `, 'success');
           vm.subemail = '';
         } else {
-          vm.$bus.$emit('message:push', `請確認 Email 是否正確`, 'danger');
+          vm.$bus.$emit('message:push', '請確認 Email 是否正確', 'danger');
           email.focus();
         }
       });
-    }
+    },
   },
 };
 </script>

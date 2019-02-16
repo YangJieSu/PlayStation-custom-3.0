@@ -31,7 +31,7 @@
               <option :value="num" v-for="num in 10" :key="num">選購 {{num}} {{product.unit}}</option>
             </select>
             <div class="text-right font-weight-bold mb-1 total-price">
-              小計 {{ product.price * product.buyNum | currency }} 
+              小計 {{ product.price * product.buyNum | currency }}
             </div>
             <button class="btn btn-warning w-100 text-primary font-weight-bold" @click.prevent="addCart(product.id, product.buyNum)">
               <i class="fas fa-spinner fa-spin" v-if="status.loading"></i>
@@ -61,16 +61,17 @@
           </div>
         </div>
       </div>
-      
+
     </div>
   </div>
 </template>
 
 <script>
-import ProdSlider from "../components/ProdSlider.vue";
+import ProdSlider from '../components/ProdSlider.vue';
+
 export default {
   components: {
-    ProdSlider
+    ProdSlider,
   },
   data() {
     return {
@@ -79,43 +80,43 @@ export default {
       product: {},
       status: {
         loading: false,
-      }
+      },
     };
   },
   methods: {
     getProduct() {
       // 取得單一商品內容
       const vm = this;
-      let api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/product/${vm.productId}`;
+      const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/product/${vm.productId}`;
       vm.isLoading = true;
-      this.$http.get(api,).then((response) => {
+      this.$http.get(api).then((response) => {
         console.log(response.data);
         vm.product = response.data.product;
         vm.$set(vm.product, 'buyNum', 1);
         vm.isLoading = false;
       });
     },
-    addCart(id, qty=1) {
+    addCart(id, qty = 1) {
       // 加入購物車
       const vm = this;
-      if (qty == 0){
+      if (qty == 0) {
         alert('請選擇商品數量');
       } else {
         vm.status.loading = true;
-        let api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/cart`;
+        const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/cart`;
         const cart = {
           product_id: id,
           qty,
         };
         this.$http.post(api, { data: cart }).then((response) => {
           console.log(response.data);
-          if(response.data.success) {
+          if (response.data.success) {
             vm.$bus.$emit('shopCart:update');
-            vm.$bus.$emit('message:push', `【${response.data.data.product.title}】${response.data.data.qty} ${response.data.data.product.unit} ${response.data.message}`, 'success'); 
+            vm.$bus.$emit('message:push', `【${response.data.data.product.title}】${response.data.data.qty} ${response.data.data.product.unit} ${response.data.message}`, 'success');
           }
           vm.status.loading = false;
         });
-      };
+      }
     },
     goBack() {
       this.$router.back();

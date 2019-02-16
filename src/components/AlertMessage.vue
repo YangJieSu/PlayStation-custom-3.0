@@ -11,10 +11,10 @@
 
 <script>
 export default {
-  data: function() {
+  data() {
     return {
       messages: [],
-    }
+    };
   },
   methods: {
     updateMeaasge(message, status) {
@@ -23,7 +23,7 @@ export default {
       vm.messages.push({
         message,
         status,
-        timestamp
+        timestamp,
       });
       vm.removeMessageWithTiming(timestamp);
     },
@@ -35,12 +35,12 @@ export default {
       const vm = this;
       setTimeout(() => {
         vm.messages.forEach((item, index) => {
-          if(item.timestamp == timestamp) {
+          if (item.timestamp == timestamp) {
             vm.messages.splice(index, 1);
           }
         });
       }, 1500);
-    }
+    },
   },
   created() {
     const vm = this;
@@ -48,5 +48,5 @@ export default {
       vm.updateMeaasge(message, status);
     });
   },
-}
+};
 </script>

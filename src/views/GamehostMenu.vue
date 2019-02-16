@@ -49,12 +49,13 @@
 
 <script>
 import Topslider from '../components/Topslider.vue';
+
 export default {
   data() {
     return {};
   },
   components: {
-    Topslider
-  }
+    Topslider,
+  },
 };
 </script>

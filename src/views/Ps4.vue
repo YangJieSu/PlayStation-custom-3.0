@@ -20,7 +20,7 @@
           <img src="../assets/images/ps4-3.jpg" class="img-fluid" alt="">
         </div>
       </div>
-      <h2 class="page_title my-3">買 PS4 的理由</h2> 
+      <h2 class="page_title my-3">買 PS4 的理由</h2>
       <div class="row justify-content-center">
         <div class="col-md-6">
           <ul class="buy-reason reason-ps4 mb-3 text-center">
@@ -57,10 +57,11 @@
 </template>
 
 <script>
-import ProdSlider from "../components/ProdSlider.vue";
+import ProdSlider from '../components/ProdSlider.vue';
+
 export default {
   components: {
-    ProdSlider
+    ProdSlider,
   },
-}
+};
 </script>

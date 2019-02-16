@@ -34,27 +34,27 @@ export default {
   data() {
     return {
       status: {
-        loading: false
-      }
-    }
+        loading: false,
+      },
+    };
   },
   props: {
     cardData: {
       type: Object,
-      default: function () {
-        return {}
-      }
+      default() {
+        return {};
+      },
     },
   },
   methods: {
     goSingleProduct(id) {
       const vm = this;
       console.log(id);
-      vm.$router.push(`/productDetail/${id}`); 
+      vm.$router.push(`/productDetail/${id}`);
     },
-    addCart(id, qty=1) {
+    addCart(id, qty = 1) {
       const vm = this;
-      let api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/cart`;
+      const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/cart`;
       vm.status.loading = true;
       const cart = {
         product_id: id,
@@ -62,13 +62,13 @@ export default {
       };
       this.$http.post(api, { data: cart }).then((response) => {
         console.log(response.data);
-        if(response.data.success) {
+        if (response.data.success) {
           vm.$bus.$emit('shopCart:update');
           vm.$bus.$emit('message:push', `【${response.data.data.product.title}】${response.data.data.qty} ${response.data.data.product.unit} ${response.data.message}`, 'success');
         }
         vm.status.loading = false;
-      })
-    }
+      });
+    },
   },
-}
+};
 </script>

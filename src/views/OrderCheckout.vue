@@ -118,39 +118,39 @@ export default {
       isLoading: false,
       orderId: '',
       order: {
-        user: {}
+        user: {},
       },
       status: {
-        loading: false
-      }
+        loading: false,
+      },
     };
   },
   methods: {
     getOrder() {
       // 取得訂單
       const vm = this;
-      let api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/order/${vm.orderId}`;
-      this.$http.get(api).then(response => {
+      const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/order/${vm.orderId}`;
+      this.$http.get(api).then((response) => {
         console.log(response.data);
         vm.order = response.data.order;
-      })
+      });
     },
     payOrder() {
       // 付款
       const vm = this;
-      let api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/pay/${vm.orderId}`;
+      const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/pay/${vm.orderId}`;
       vm.status.loading = true;
-      this.$http.post(api).then(response => {
+      this.$http.post(api).then((response) => {
         console.log(response.data);
-        if(response.data.success) {
+        if (response.data.success) {
           vm.$bus.$emit('message:push', response.data.message, 'success');
           vm.getOrder();
         } else {
           vm.$bus.$emit('message:push', '付款失敗 :( ', 'danger');
         }
         vm.status.loading = false;
-      })
-    }
+      });
+    },
   },
   created() {
     const vm = this;

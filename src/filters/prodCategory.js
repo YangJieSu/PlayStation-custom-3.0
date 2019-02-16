@@ -4,10 +4,10 @@ export default function (catagory) {
     case 'Switch':
       return classname = 'badge-danger';
       break;
-    case 'N3DS': 
+    case 'N3DS':
       return classname = 'badge-primary';
       break;
-    case 'PS4': 
+    case 'PS4':
       return classname = 'badge-dark';
       break;
   }

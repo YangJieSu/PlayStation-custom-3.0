@@ -115,7 +115,11 @@
                   placeholder="如果貨品有其他需求，請在此填入"
                 ></textarea>
               </div>
-              <button type="button" class="btn btn-success btn-block btn-lg font-weight-bold rounded-0" @click.prevent="createdOrder">
+              <button
+                type="button"
+                class="btn btn-success btn-block btn-lg font-weight-bold rounded-0"
+                @click.prevent="createdOrder"
+              >
                 <i class="fas fa-envelope mr-1"></i>
                 送出訂單
               </button>
@@ -124,7 +128,9 @@
         </div>
         <div class="col-lg-4">
           <div class="p-3 bg-warning text-primary">
-            <div class="text-center h3 border-bottom border-primary pb-2 font-weight-bold">訂單摘要</div>
+            <div class="text-center h3 border-bottom border-primary pb-2 font-weight-bold">
+              訂單摘要
+            </div>
             <div class="mt-3 mb-0" v-if="cart.total > cart.final_total">
               <div class="d-flex justify-content-between align-items-center font-weight-bold mb-1">
                 <span>總計</span>
@@ -176,8 +182,6 @@
           >取消訂單</div>
         </div>
       </div>
-
-      
     </div>
 
     <div
@@ -201,6 +205,7 @@
 
 <script>
 import ShopCartList from '../components/ShopCartList.vue';
+
 export default {
   components: {
     ShopCartList
@@ -210,21 +215,21 @@ export default {
       isLoading: false,
       status: {
         loading: false,
-        loadingItem: ''
+        loadingItem: '',
       },
       cart: {
         carts: []
       },
       createOrder: false,
-      coupon_code: "",
+      coupon_code: '',
       form: {
         user: {
-          email: "",
-          name: "",
-          tel: "",
-          address: ""
+          email: '',
+          name: '',
+          tel: '',
+          address: '',
         },
-        message: ""
+        message: '',
       }
     };
   },
@@ -232,10 +237,11 @@ export default {
     getCart() {
       // 取得購物車列表
       const vm = this;
-      let api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/cart`;
+      const api = `${process.env.VUE_APP_API_PATH}/api/${
+        process.env.VUE_APP_CUSTOM_PATH
+      }/cart`;
       vm.isLoading = true;
-      this.$http.get(api).then(response => {
-        console.log(response.data);
+      this.$http.get(api).then((response) => {
         vm.cart = response.data.data;
         vm.isLoading = false;
       });
@@ -243,65 +249,66 @@ export default {
     removeCart(id, prodName) {
       // 刪除某一筆購物車
       const vm = this;
-      let api = `${process.env.VUE_APP_API_PATH}/api/${
+      const api = `${process.env.VUE_APP_API_PATH}/api/${
         process.env.VUE_APP_CUSTOM_PATH
       }/cart/${id}`;
       vm.status.loadingItem = id;
-      this.$http.delete(api).then(response => {
-        console.log(response.data);
+      this.$http.delete(api).then((response) => {
         vm.$bus.$emit('message:push', `${response.data.message}【${prodName}】`, 'success');
-        vm.$bus.$emit('shopCart:update');
+        vm.$bus.$emit("shopCart:update");
         vm.getCart();
       });
     },
     addCoupon() {
       // 套用優惠券
       const vm = this;
-      let api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/coupon`;
+      const api = `${process.env.VUE_APP_API_PATH}/api/${
+        process.env.VUE_APP_CUSTOM_PATH
+      }/coupon`;
       const coupon = {
-        code: vm.coupon_code
+        code: vm.coupon_code,
       };
-      this.$validator.validate().then(result => {
+      this.$validator.validate().then((result) => {
         if (result) {
           vm.status.loading = true;
-          this.$http.post(api, { data: coupon }).then(response => {
-            console.log(response.data);
-            if(response.data.success) {
+          this.$http.post(api, { data: coupon }).then((response) => {
+            if (response.data.success) {
               vm.$bus.$emit('message:push', `${response.data.message}`, 'success');
             } else {
               vm.$bus.$emit('message:push', `${response.data.message}`, 'danger');
             }
-            vm.coupon_code = "";
+            vm.coupon_code = '';
             vm.status.loading = false;
             vm.getCart();
           });
         } else {
-          console.log("請輸入優惠碼");
+          console.log('請輸入優惠碼');
         }
       });
     },
     createdOrder() {
       // 建立訂單
       const vm = this;
-      let api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/order`;
-      this.$validator.validate().then(result => {
+      const api = `${process.env.VUE_APP_API_PATH}/api/${
+        process.env.VUE_APP_CUSTOM_PATH
+      }/order`;
+      this.$validator.validate().then((result) => {
         if (result) {
           vm.isLoading = true;
           this.$http.post(api, { data: vm.form }).then((response) => {
-            console.log(response);
-            if (response.data.success){
+            if (response.data.success) {
               vm.$bus.$emit('shopCart:update');
               vm.$router.push(`/order_checkout/${response.data.orderId}`);
-            };
+            }
           });
         } else {
-          vm.$bus.$emit('message:push', `噢！訂單內有欄位空白唷`, 'danger');
-        };
+          vm.$bus.$emit('message:push', '噢！訂單內有欄位空白唷', 'danger');
+        }
       });
     },
   },
   created() {
     this.getCart();
-  }
+  },
 };
 </script>

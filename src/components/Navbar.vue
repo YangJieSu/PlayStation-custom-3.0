@@ -34,22 +34,23 @@
 
 <script>
 import $ from 'jquery';
-  export default {
-    data() {
-      return {
-        currentPage: 'Home'
-      };
+
+export default {
+  data() {
+    return {
+      currentPage: 'Home',
+    };
+  },
+  methods: {
+    Page() {
+      this.currentPage = this.$router.history.current.name;
     },
-    methods: {
-      Page() {
-        this.currentPage = this.$router.history.current.name;
-      },
-      closeNav() {
-        $('.collapse').collapse('hide');
-      }
+    closeNav() {
+      $('.collapse').collapse('hide');
     },
-    created() {
-      this.Page();
-    },
-  };
+  },
+  created() {
+    this.Page();
+  },
+};
 </script>

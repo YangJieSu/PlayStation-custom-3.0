@@ -46,7 +46,7 @@
                 <img src="../assets/images/n3ds_icon.png" class="d-none d-md-inline-block img-fluid" width="50" alt="">
                 <span>N3DS 遊戲</span>
               </a>
-            </li>          
+            </li>
           </ul>
         </div>
         <div class="col-md-8 col-lg-10 d-none d-sm-block">
@@ -78,97 +78,92 @@
 import Topslider from '../components/Topslider.vue';
 import ProductCard from '../components/ProductCard.vue';
 import ProdSlider from '../components/ProdSlider.vue';
-  export default {
-    components: {
-      ProductCard,
-      Topslider,
-      ProdSlider
-    },
-    data() {
-      return {
-        products: [],
-        isLoading: false,
-        pagination: {
-          filterPageSize : 10,
-          total_pages: 1,
-          current_page: 1,
-          has_pre: false,
-          has_next: false,
-        },
-        selected: 'all',
-        searchFilter: '',
-        searchResult: [],
-        status: {
-          loading: false
-        }
-      };
-    },
-    methods: {
-      getProducts(page = 1) {
-        const vm = this;
-        let api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/products/all`;
-        vm.isLoading = true;
-        this.$http.get(api).then((response) => {
-          console.log(response.data)
-          vm.products = response.data.products;
-          vm.pagination.current_page = page;
-          vm.isLoading = false;
-        });
+
+export default {
+  components: {
+    ProductCard,
+    Topslider,
+    ProdSlider,
+  },
+  data() {
+    return {
+      products: [],
+      isLoading: false,
+      pagination: {
+        filterPageSize: 10,
+        total_pages: 1,
+        current_page: 1,
+        has_pre: false,
+        has_next: false,
       },
-      changeCategory(category) {
-        const vm = this;
-        vm.selected = category;
-        vm.pagination.current_page = 1;
-        vm.searchFilter = '';
+      selected: 'all',
+      searchFilter: '',
+      searchResult: [],
+      status: {
+        loading: false,
+      },
+    };
+  },
+  methods: {
+    getProducts(page = 1) {
+      const vm = this;
+      const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/products/all`;
+      vm.isLoading = true;
+      this.$http.get(api).then((response) => {
+        console.log(response.data);
+        vm.products = response.data.products;
+        vm.pagination.current_page = page;
+        vm.isLoading = false;
+      });
+    },
+    changeCategory(category) {
+      const vm = this;
+      vm.selected = category;
+      vm.pagination.current_page = 1;
+      vm.searchFilter = '';
+      vm.searchResult = [];
+    },
+    searchProducts() {
+      // 過濾搜尋
+      const vm = this;
+      vm.pagination.current_page = 1;
+      vm.selected = '';
+      if (vm.searchFilter !== '') {
+        vm.searchResult = vm.products.filter(item => item.title.match(vm.searchFilter));
+      } else {
+        vm.selected = 'all';
         vm.searchResult = [];
-      },
-      searchProducts() {
-        // 過濾搜尋
-        const vm = this;
-        vm.pagination.current_page = 1;
-        vm.selected = '';
-        if(vm.searchFilter !== '') {
-          vm.searchResult = vm.products.filter((item) => {
-            return item.title.match(vm.searchFilter);
-          });
-        } else {
-          vm.selected = 'all';
-          vm.searchResult = [];
-        };
       }
     },
-    computed: {
-      filterProd() {
-        // 過濾搜尋及過濾分類
-        const vm = this;
-        if(vm.searchFilter || vm.searchResult.length) {
-          vm.selected = vm.searchResult[0].category;
-          return vm.searchResult;
-        } else {
-          return vm.products.filter((item) => {
-            if(vm.selected == 'all') {
-              return item
-            } else {
-              return item.category == vm.selected;
-            }
-          });
+  },
+  computed: {
+    filterProd() {
+      // 過濾搜尋及過濾分類
+      const vm = this;
+      if (vm.searchFilter || vm.searchResult.length) {
+        vm.selected = vm.searchResult[0].category;
+        return vm.searchResult;
+      }
+      return vm.products.filter((item) => {
+        if (vm.selected == 'all') {
+          return item;
         }
-      },
-      filterData() {
-        // 分頁邏輯
-        const vm = this;
-        let dataLen = vm.filterProd.length;
-        let nowPage = vm.pagination.current_page;
-        vm.pagination.total_pages = Math.ceil( dataLen / vm.pagination.filterPageSize );
-        nowPage > 1 ? vm.pagination.has_pre = true : vm.pagination.has_pre = false;
-        nowPage == vm.pagination.total_pages ? vm.pagination.has_next = false : vm.pagination.has_next = true;
-        return vm.filterProd.filter((item, index) => {
-          return index < (nowPage * vm.pagination.filterPageSize) && index >= (nowPage - 1) * vm.pagination.filterPageSize;
-        });
-      }
+        return item.category == vm.selected;
+      });
     },
-    created() {
-      this.getProducts();
+    filterData() {
+      // 分頁邏輯
+      const vm = this;
+      const dataLen = vm.filterProd.length;
+      const nowPage = vm.pagination.current_page;
+      vm.pagination.total_pages = Math.ceil(dataLen / vm.pagination.filterPageSize);
+      nowPage > 1 ? vm.pagination.has_pre = true : vm.pagination.has_pre = false;
+      nowPage == vm.pagination.total_pages ? vm.pagination.has_next = false : vm.pagination.has_next = true;
+      return vm.filterProd.filter((item, index) => index < (nowPage * vm.pagination.filterPageSize) && index >= (nowPage - 1) * vm.pagination.filterPageSize);
     },
-  };
+  },
+  created() {
+    this.getProducts();
+  },
+};
 </script>
