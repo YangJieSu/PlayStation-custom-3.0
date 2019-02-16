@@ -61,7 +61,9 @@
                   v-validate="'required|email'"
                   autofocus
                 >
-                <span class="text-danger" v-if="errors.has('email')">{{errors.first('email')}}</span>
+                <span class="text-danger" v-if="errors.has('email')">
+                  {{errors.first('email')}}
+                </span>
               </div>
               <div class="form-froup mb-3">
                 <label for="name">*收件人姓名</label>
@@ -208,7 +210,7 @@ import ShopCartList from '../components/ShopCartList.vue';
 
 export default {
   components: {
-    ShopCartList
+    ShopCartList,
   },
   data() {
     return {
@@ -218,7 +220,7 @@ export default {
         loadingItem: '',
       },
       cart: {
-        carts: []
+        carts: [],
       },
       createOrder: false,
       coupon_code: '',
@@ -230,16 +232,14 @@ export default {
           address: '',
         },
         message: '',
-      }
+      },
     };
   },
   methods: {
     getCart() {
       // 取得購物車列表
       const vm = this;
-      const api = `${process.env.VUE_APP_API_PATH}/api/${
-        process.env.VUE_APP_CUSTOM_PATH
-      }/cart`;
+      const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/cart`;
       vm.isLoading = true;
       this.$http.get(api).then((response) => {
         vm.cart = response.data.data;
@@ -249,22 +249,18 @@ export default {
     removeCart(id, prodName) {
       // 刪除某一筆購物車
       const vm = this;
-      const api = `${process.env.VUE_APP_API_PATH}/api/${
-        process.env.VUE_APP_CUSTOM_PATH
-      }/cart/${id}`;
+      const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/cart/${id}`;
       vm.status.loadingItem = id;
       this.$http.delete(api).then((response) => {
         vm.$bus.$emit('message:push', `${response.data.message}【${prodName}】`, 'success');
-        vm.$bus.$emit("shopCart:update");
+        vm.$bus.$emit('shopCart:update');
         vm.getCart();
       });
     },
     addCoupon() {
       // 套用優惠券
       const vm = this;
-      const api = `${process.env.VUE_APP_API_PATH}/api/${
-        process.env.VUE_APP_CUSTOM_PATH
-      }/coupon`;
+      const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/coupon`;
       const coupon = {
         code: vm.coupon_code,
       };
@@ -289,9 +285,7 @@ export default {
     createdOrder() {
       // 建立訂單
       const vm = this;
-      const api = `${process.env.VUE_APP_API_PATH}/api/${
-        process.env.VUE_APP_CUSTOM_PATH
-      }/order`;
+      const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/order`;
       this.$validator.validate().then((result) => {
         if (result) {
           vm.isLoading = true;

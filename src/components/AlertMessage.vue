@@ -1,8 +1,19 @@
 <template>
   <div class="message-alert" :class="{ 'active': messages.length !== 0 }">
-    <div class="alert alert-dismissible  mb-0 rounded-0" :class="'alert-' + item.status" v-for="(item, index) in messages" :key="index">
+    <div
+      class="alert alert-dismissible mb-0 rounded-0"
+      :class="'alert-' + item.status"
+      v-for="(item, index) in messages"
+      :key="index"
+    >
       {{ item.message }}
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close" @click="removeMessage(index)">
+      <button
+        type="button"
+        class="close"
+        data-dismiss="alert"
+        aria-label="Close"
+        @click="removeMessage(index)"
+      >
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
@@ -35,7 +46,7 @@ export default {
       const vm = this;
       setTimeout(() => {
         vm.messages.forEach((item, index) => {
-          if (item.timestamp == timestamp) {
+          if (item.timestamp === timestamp) {
             vm.messages.splice(index, 1);
           }
         });

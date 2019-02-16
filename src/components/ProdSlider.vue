@@ -50,7 +50,6 @@ export default {
       const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/products/all`;
       vm.isLoading = true;
       this.$http.get(api).then((response) => {
-        console.log(response.data);
         if (response.data.success) {
           vm.products = response.data.products;
           vm.isLoading = false;
@@ -100,10 +99,10 @@ export default {
         return vm.searchResult;
       }
       return vm.products.filter((item) => {
-        if (vm.prodCategory == 'all') {
+        if (vm.prodCategory === 'all') {
           return item;
         }
-        return item.category == vm.prodCategory;
+        return item.category === vm.prodCategory;
       });
     },
   },

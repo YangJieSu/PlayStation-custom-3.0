@@ -2,7 +2,7 @@
   <div>
     <AlertMessage></AlertMessage>
     <Navbar></Navbar>
-    <div class="cart"  v-if="cart.carts.length !== 0">
+    <div class="cart" v-if="cart.carts.length !== 0">
       <div class="cart-icon" @click.prevent="showCart = !showCart">
         <i class="fas fa-shopping-cart"></i>
         <i class="fas fa-circle" v-if="cart.carts.length !== 0"></i>
@@ -12,7 +12,9 @@
           <div class="col-md-12">
             <!-- title -->
             <div class="d-flex justify-content-between py-2 px-0">
-              <h5 class="m-0"><strong>購物車清單</strong></h5>
+              <h5 class="m-0">
+                <strong>購物車清單</strong>
+              </h5>
               <div>
                 <button type="button" class="close m-0" @click.prevent="closeCart">
                   <span>&times;</span>
@@ -25,7 +27,13 @@
                 <tr v-if="cart.carts.length == 0">購物車還沒有東西喔!</tr>
                 <tr v-for="item in cart.carts" :key="item.id">
                   <td>
-                    <button type="button" class="btn btn-outline-danger btn-sm" @click.prevent="rempoveCart(item.id)"><i class="fas fa-trash-alt"></i></button>
+                    <button
+                      type="button"
+                      class="btn btn-outline-danger btn-sm"
+                      @click.prevent="rempoveCart(item.id)"
+                    >
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
                   </td>
                   <td>{{ item.product.title }}</td>
                   <td>{{ item.qty }}{{ item.product.unit }}</td>
@@ -34,10 +42,23 @@
               </tbody>
             </table>
             <!-- button -->
-            <router-link class="nav-item text-white" to="/create_order" v-if="cart.carts.length !== 0">
-              <button type="button" class="btn btn-danger btn-block w-100 mb-3" @click="closeCart">結帳去!</button>
+            <router-link
+              class="nav-item text-white"
+              to="/create_order"
+              v-if="cart.carts.length !== 0"
+            >
+              <button
+                type="button"
+                class="btn btn-danger btn-block w-100 mb-3"
+                @click="closeCart"
+              >結帳去!</button>
             </router-link>
-            <button type="button" class="btn btn-danger btn-block w-100 mb-3" v-if="cart.carts.length == 0" @click.prevent="closeCart">繼續購物</button>
+            <button
+              type="button"
+              class="btn btn-danger btn-block w-100 mb-3"
+              v-if="cart.carts.length == 0"
+              @click.prevent="closeCart"
+            >繼續購物</button>
           </div>
         </div>
       </div>
@@ -46,7 +67,6 @@
     <router-view></router-view>
 
     <Footer></Footer>
-
   </div>
 </template>
 
@@ -73,7 +93,6 @@ export default {
       const vm = this;
       const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/cart`;
       this.$http.get(api).then((response) => {
-        console.log(response.data);
         vm.cart = response.data.data;
       });
     },
@@ -81,8 +100,7 @@ export default {
       // 刪除某一筆購物車
       const vm = this;
       const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/cart/${id}`;
-      this.$http.delete(api).then((response) => {
-        console.log(response.data);
+      this.$http.delete(api).then(() => {
         vm.getCart();
       });
     },

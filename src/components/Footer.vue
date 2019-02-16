@@ -50,8 +50,6 @@
             <div class="logo mb-3">
               <!-- <img src="logo.png" height="60" alt> -->
               <img src="../../public/logo.png" height="60" alt>
-              <!-- C:\Users\Cloud\Desktop\PlayStation-custom-3.0\public\logo.png -->
-              <!-- http://localhost:8080/PlayStation-custom-3.0/dist/logo.png-->
             </div>
             <ul class="contactInfo list-unstyled mb-0">
               <li>連絡電話 :
