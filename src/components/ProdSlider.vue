@@ -1,8 +1,5 @@
 <template>
   <div class="mt-3">
-    <loading :active.sync="isLoading">
-      <img src="../assets/images/loading.gif" alt="" width="200">
-    </loading>
     <div class="swiper-container" id="prodSwiper">
       <div class="swiper-wrapper">
         <div class="swiper-slide" v-for="item in filterData" :key="item.id">
@@ -14,15 +11,13 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 import Swiper from 'swiper';
 import ProductCard from './ProductCard.vue';
 
 export default {
   data() {
-    return {
-      products: [],
-      isLoading: false,
-    };
+    return {};
   },
   components: {
     ProductCard,
@@ -44,19 +39,7 @@ export default {
     },
   },
   methods: {
-    getProducts() {
-      // 取得所有產品
-      const vm = this;
-      const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/products/all`;
-      vm.isLoading = true;
-      this.$http.get(api).then((response) => {
-        if (response.data.success) {
-          vm.products = response.data.products;
-          vm.isLoading = false;
-          vm.showSwiper();
-        }
-      });
-    },
+    ...mapActions('productsModules', ['getProducts']),
     showSwiper() {
       const mySwiper = new Swiper('#prodSwiper', {
         slidesPerView: 4,
@@ -93,6 +76,7 @@ export default {
     },
   },
   computed: {
+    ...mapGetters('productsModules', ['products']),
     filterData() {
       const vm = this;
       if (vm.searchFilter || vm.searchResult.length) {
@@ -104,6 +88,12 @@ export default {
         }
         return item.category === vm.prodCategory;
       });
+    },
+  },
+  watch: {
+    products() {
+      const vm = this;
+      vm.showSwiper();
     },
   },
   created() {

@@ -2,13 +2,16 @@ export default function (catagory) {
   let classname = '';
   switch (catagory) {
     case 'Switch':
-      return classname = 'badge-danger';
+      classname = 'badge-danger';
       break;
     case 'N3DS':
-      return classname = 'badge-primary';
+      classname = 'badge-primary';
       break;
     case 'PS4':
-      return classname = 'badge-dark';
+      classname = 'badge-dark';
       break;
+    default:
+      classname = 'badge';
   }
+  return classname;
 }

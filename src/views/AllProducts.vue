@@ -1,8 +1,5 @@
 <template>
   <div class="main">
-    <loading :active.sync="isLoading">
-      <img src="../assets/images/loading.gif" alt width="200">
-    </loading>
     <Topslider></Topslider>
     <div class="products container">
       <h2 class="page_title my-3">購物專區</h2>
@@ -106,7 +103,7 @@
                 <ProductCard :cardData="item"></ProductCard>
               </div>
             </div>
-            <Pagination :pageData="pagination" @changepage="getProducts"></Pagination>
+            <Pagination :pageData="pagination" @changepage="getPage"></Pagination>
           </template>
         </div>
         <div class="col d-sm-none">
@@ -128,6 +125,7 @@
 
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
 import Topslider from '../components/Topslider.vue';
 import ProductCard from '../components/ProductCard.vue';
 import ProdSlider from '../components/ProdSlider.vue';
@@ -140,8 +138,6 @@ export default {
   },
   data() {
     return {
-      products: [],
-      isLoading: false,
       pagination: {
         filterPageSize: 10,
         total_pages: 1,
@@ -158,16 +154,7 @@ export default {
     };
   },
   methods: {
-    getProducts(page = 1) {
-      const vm = this;
-      const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/products/all`;
-      vm.isLoading = true;
-      this.$http.get(api).then((response) => {
-        vm.products = response.data.products;
-        vm.pagination.current_page = page;
-        vm.isLoading = false;
-      });
-    },
+    ...mapActions('productsModules', ['getProducts']),
     changeCategory(category) {
       const vm = this;
       vm.selected = category;
@@ -187,8 +174,13 @@ export default {
         vm.searchResult = [];
       }
     },
+    getPage(page = 1) {
+      const vm = this;
+      vm.pagination.current_page = page;
+    },
   },
   computed: {
+    ...mapGetters('productsModules', ['products']),
     filterProd() {
       // 過濾搜尋及過濾分類
       const vm = this;

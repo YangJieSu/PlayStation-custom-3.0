@@ -1,5 +1,8 @@
 <template>
   <div>
+    <loading :active.sync="isLoading">
+      <img src="../assets/images/loading.gif" alt width="200">
+    </loading>
     <AlertMessage></AlertMessage>
     <Navbar></Navbar>
     <div class="cart" v-if="cart.carts.length !== 0">
@@ -30,7 +33,7 @@
                     <button
                       type="button"
                       class="btn btn-outline-danger btn-sm"
-                      @click.prevent="rempoveCart(item.id)"
+                      @click.prevent="removeCart(item.id, item.product.title)"
                     >
                       <i class="fas fa-trash-alt"></i>
                     </button>
@@ -71,15 +74,13 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 import Navbar from './Navbar.vue';
 import Footer from './Footer.vue';
 
 export default {
   data() {
     return {
-      cart: {
-        carts: [],
-      },
       showCart: false,
     };
   },
@@ -88,33 +89,23 @@ export default {
     Footer,
   },
   methods: {
-    getCart() {
-      // 取得購物車列表
+    ...mapActions('cartModules', ['getCart']),
+    removeCart(id, prodName) {
       const vm = this;
-      const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/cart`;
-      this.$http.get(api).then((response) => {
-        vm.cart = response.data.data;
-      });
-    },
-    rempoveCart(id) {
-      // 刪除某一筆購物車
-      const vm = this;
-      const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/cart/${id}`;
-      this.$http.delete(api).then(() => {
-        vm.getCart();
-      });
+      vm.$store.dispatch('cartModules/removeCart', { id, prodName });
     },
     closeCart() {
       const vm = this;
       vm.showCart = false;
     },
   },
+  computed: {
+    ...mapGetters('cartModules', ['cart']),
+    ...mapGetters(['isLoading']),
+  },
   created() {
     const vm = this;
     vm.getCart();
-    vm.$bus.$on('shopCart:update', () => {
-      vm.getCart();
-    });
   },
 };
 </script>

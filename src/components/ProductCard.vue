@@ -66,24 +66,12 @@ export default {
       vm.$router.push(`/productDetail/${id}`);
     },
     addCart(id, qty = 1) {
+      // 加入購物車
       const vm = this;
-      const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/cart`;
       vm.status.loading = true;
-      const cart = {
-        product_id: id,
-        qty,
-      };
-      this.$http.post(api, { data: cart }).then((response) => {
-        if (response.data.success) {
-          vm.$bus.$emit('shopCart:update');
-          vm.$bus.$emit(
-            'message:push',
-            `【${response.data.data.product.title}】${response.data.data.qty} ${response.data.data.product.unit} ${response.data.message}`,
-            'success',
-          );
-        }
-        vm.status.loading = false;
-      });
+      vm.$store.dispatch('cartModules/addCart', { id, qty })
+        .then(() => { vm.status.loading = false; })
+        .catch(() => { vm.status.loading = false; });
     },
   },
 };

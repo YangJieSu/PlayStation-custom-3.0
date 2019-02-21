@@ -1,9 +1,5 @@
 <template>
   <div class="main">
-    <loading :active.sync="isLoading">
-      <img src="../assets/images/loading.gif" alt width="200">
-    </loading>
-
     <div class="container productDetail mb-3">
       <nav aria-label="breadcrumb ">
         <ol class="breadcrumb px-0">
@@ -34,12 +30,12 @@
                 <strong>{{ product.price | currency }}</strong>
               </div>
             </div>
-            <select class="form-control mb-3" v-model="product.buyNum">
+            <select class="form-control mb-3" v-model="buyNum">
               <option value="0" selected disabled>請選擇商品數量</option>
               <option :value="num" v-for="num in 10" :key="num">選購 {{num}} {{product.unit}}</option>
             </select>
             <div class="text-right font-weight-bold mb-1 total-price">
-              小計 {{ product.price * product.buyNum | currency }}
+              小計 {{ product.price * buyNum | currency }}
             </div>
             <button
               class="btn btn-warning w-100 text-primary font-weight-bold"
@@ -75,6 +71,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 import ProdSlider from '../components/ProdSlider.vue';
 
 export default {
@@ -83,56 +80,47 @@ export default {
   },
   data() {
     return {
-      isLoading: false,
       productId: '',
-      product: {},
+      buyNum: 1,
       status: {
         loading: false,
       },
     };
   },
   methods: {
-    getProduct() {
+    getProduct(id) {
       // 取得單一商品內容
       const vm = this;
-      const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/product/${vm.productId}`;
-      vm.isLoading = true;
-      this.$http.get(api).then((response) => {
-        vm.product = response.data.product;
-        vm.$set(vm.product, 'buyNum', 1);
-        vm.isLoading = false;
-      });
+      vm.$store.dispatch('productsModules/getProduct', id);
     },
     addCart(id, qty = 1) {
       // 加入購物車
       const vm = this;
       vm.status.loading = true;
-      const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/cart`;
-      const cart = {
-        product_id: id,
-        qty,
-      };
-      this.$http.post(api, { data: cart }).then((response) => {
-        if (response.data.success) {
-          vm.$bus.$emit('shopCart:update');
-          vm.$bus.$emit(
-            'message:push',
-            `【${response.data.data.product.title}】${response.data.data.qty} ${response.data.data.product.unit} ${response.data.message}`,
-            'success',
-          );
-        }
-        vm.status.loading = false;
-      });
+      vm.$store.dispatch('cartModules/addCart', { id, qty })
+        .then(() => { vm.status.loading = false; })
+        .catch(() => { vm.status.loading = false; });
     },
     goBack() {
       this.$router.back();
     },
   },
+  computed: {
+    ...mapGetters('productsModules', ['product']),
+  },
   created() {
-    this.productId = this.$route.params.productId;
-    this.getProduct();
+    const vm = this;
+    vm.productId = vm.$route.params.productId;
+    vm.getProduct(vm.productId);
     document.body.scrollTop = 350;
     document.documentElement.scrollTop = 350;
+  },
+  watch: {
+    '$route.params.productId': function route() {
+      const vm = this;
+      vm.productId = vm.$route.params.productId;
+      vm.getProduct(vm.productId);
+    },
   },
 };
 </script>

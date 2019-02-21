@@ -28,7 +28,7 @@ export default new Router({
         },
         {
           path: 'gamehost',
-          name: 'Gamehost',
+          // name: 'Gamehost',
           component: () => import('./components/Gamehost.vue'),
           children: [
             {

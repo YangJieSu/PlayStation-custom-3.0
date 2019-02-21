@@ -81,10 +81,15 @@ export default {
       const email = document.querySelector('#exampleInputEmail1');
       this.$validator.validate().then((result) => {
         if (result) {
-          vm.$bus.$emit('message:push', `感謝 ${vm.subemail} 的訂閱!! `, 'success');
+          vm.$store.dispatch('alertModules/updateMeaasge', {
+            message: `感謝 ${vm.subemail} 的訂閱!!`,
+            status: 'success',
+          }, { root: true });
           vm.subemail = '';
         } else {
-          vm.$bus.$emit('message:push', '請確認 Email 是否正確', 'danger');
+          vm.$store.dispatch('alertModules/updateMeaasge', {
+            message: '請確認 Email 是否正確',
+          }, { root: true });
           email.focus();
         }
       });

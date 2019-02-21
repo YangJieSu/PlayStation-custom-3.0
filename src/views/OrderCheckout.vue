@@ -1,8 +1,5 @@
 <template>
   <div class="main">
-    <loading :active.sync="isLoading">
-      <img src="../assets/images/loading.gif" alt width="200">
-    </loading>
     <div class="container py-5">
       <div class="form-row">
         <div class="col-md-4">
@@ -140,14 +137,12 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
+
 export default {
   data() {
     return {
-      isLoading: false,
       orderId: '',
-      order: {
-        user: {},
-      },
       status: {
         loading: false,
       },
@@ -157,26 +152,16 @@ export default {
     getOrder() {
       // 取得訂單
       const vm = this;
-      const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/order/${vm.orderId}`;
-      this.$http.get(api).then((response) => {
-        vm.order = response.data.order;
-      });
+      vm.$store.dispatch('orderModules/getOrder', vm.orderId);
     },
     payOrder() {
       // 付款
       const vm = this;
-      const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/pay/${vm.orderId}`;
-      vm.status.loading = true;
-      this.$http.post(api).then((response) => {
-        if (response.data.success) {
-          vm.$bus.$emit('message:push', response.data.message, 'success');
-          vm.getOrder();
-        } else {
-          vm.$bus.$emit('message:push', '付款失敗 :( ', 'danger');
-        }
-        vm.status.loading = false;
-      });
+      vm.$store.dispatch('orderModules/payOrder', vm.orderId);
     },
+  },
+  computed: {
+    ...mapGetters('orderModules', ['order']),
   },
   created() {
     const vm = this;

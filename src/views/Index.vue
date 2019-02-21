@@ -23,9 +23,6 @@ import Topslider from '../components/Topslider.vue';
 import ProdSlider from '../components/ProdSlider.vue';
 
 export default {
-  data() {
-    return {};
-  },
   components: {
     Topslider,
     ProdSlider,

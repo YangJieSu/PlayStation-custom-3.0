@@ -1,9 +1,5 @@
 <template>
   <div class="main">
-    <loading :active.sync="isLoading">
-      <img src="../assets/images/loading.gif" alt width="200">
-    </loading>
-
     <!-- step -->
     <div
       class="container py-3"
@@ -206,6 +202,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 import ShopCartList from '../components/ShopCartList.vue';
 
 export default {
@@ -214,13 +211,9 @@ export default {
   },
   data() {
     return {
-      isLoading: false,
       status: {
         loading: false,
         loadingItem: '',
-      },
-      cart: {
-        carts: [],
       },
       createOrder: false,
       coupon_code: '',
@@ -236,70 +229,51 @@ export default {
     };
   },
   methods: {
-    getCart() {
-      // 取得購物車列表
-      const vm = this;
-      const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/cart`;
-      vm.isLoading = true;
-      this.$http.get(api).then((response) => {
-        vm.cart = response.data.data;
-        vm.isLoading = false;
-      });
-    },
+    ...mapActions('cartModules', ['getCart']),
     removeCart(id, prodName) {
-      // 刪除某一筆購物車
       const vm = this;
-      const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/cart/${id}`;
       vm.status.loadingItem = id;
-      this.$http.delete(api).then((response) => {
-        vm.$bus.$emit('message:push', `${response.data.message}【${prodName}】`, 'success');
-        vm.$bus.$emit('shopCart:update');
-        vm.getCart();
-      });
+      vm.$store.dispatch('cartModules/removeCart', { id, prodName });
     },
     addCoupon() {
       // 套用優惠券
       const vm = this;
-      const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/coupon`;
       const coupon = {
         code: vm.coupon_code,
       };
+      vm.status.loading = true;
       this.$validator.validate().then((result) => {
         if (result) {
-          vm.status.loading = true;
-          this.$http.post(api, { data: coupon }).then((response) => {
-            if (response.data.success) {
-              vm.$bus.$emit('message:push', `${response.data.message}`, 'success');
-            } else {
-              vm.$bus.$emit('message:push', `${response.data.message}`, 'danger');
-            }
-            vm.coupon_code = '';
-            vm.status.loading = false;
-            vm.getCart();
-          });
+          vm.$store.dispatch('couponModules/addCoupon', coupon)
+            .then(() => {
+              vm.coupon_code = '';
+              vm.status.loading = false;
+            })
+            .catch(() => {
+              vm.status.loading = false;
+            });
         } else {
-          console.log('請輸入優惠碼');
+          vm.$store.dispatch('alertModules/updateMeaasge', { message: '請輸入優惠碼' });
+          vm.status.loading = false;
         }
       });
     },
     createdOrder() {
       // 建立訂單
       const vm = this;
-      const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/order`;
-      this.$validator.validate().then((result) => {
+      vm.$validator.validate().then((result) => {
         if (result) {
-          vm.isLoading = true;
-          this.$http.post(api, { data: vm.form }).then((response) => {
-            if (response.data.success) {
-              vm.$bus.$emit('shopCart:update');
-              vm.$router.push(`/order_checkout/${response.data.orderId}`);
-            }
-          });
+          vm.$store.dispatch('orderModules/createdOrder', vm.form);
         } else {
-          vm.$bus.$emit('message:push', '噢！訂單內有欄位空白唷', 'danger');
+          vm.$store.dispatch('alertModules/updateMeaasge', {
+            message: '噢！訂單內有欄位空白唷',
+          });
         }
       });
     },
+  },
+  computed: {
+    ...mapGetters('cartModules', ['cart']),
   },
   created() {
     this.getCart();

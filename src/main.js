@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import Vuex from 'vuex';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 import 'bootstrap';
@@ -16,6 +17,7 @@ import prodCategory from './filters/prodCategory';
 import Pagination from './components/Pagination.vue';
 import AlertMessage from './components/AlertMessage.vue';
 
+Vue.use(Vuex);
 Vue.use(VueAxios, axios);
 Vue.use(VeeValidate);
 VeeValidate.Validator.localize('zh_TW', zhTWValidate);
