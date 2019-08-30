@@ -1,6 +1,6 @@
 # Vue.js 購物網站
 ## Demo
-https://yangjiesu.github.io/PlayStation-custom-3.0/dist
+https://syj0905.github.io/PlayStation-custom-3.0/dist
 ## Intro
 * 將後臺所建立的商品及購買系統利用 Ajax 將畫面呈現至前台客戶端
 # 功能
